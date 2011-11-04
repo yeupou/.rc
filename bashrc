@@ -31,4 +31,6 @@ alias ts='cat /stockage/torrent/watch/status'
 alias t='ls /stockage/torrent/watch/*.hash'
 alias t+='ls /stockage/torrent/watch/*+'
 
+alias uupd='~/.unison.sh'
+
 # EOF
