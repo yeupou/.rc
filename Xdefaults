@@ -10,11 +10,12 @@ urxvt*depth: 32
 urxvt*background: rgba:0000/0000/0000/dddd
 urxvt*borderColor: rgba:0000/0000/0000/dddd
 urxvt*foreground: white
+urxvt*color12: SkyBlue2
 
 urxvt*troughColor: gray33
 urxvt*scrollColor: rgba:0000/0000/0000/a000
 urxvt*scrollstyle: plain 
 urxvt*scrollBar_right: true
+urxvt*thickness: 15
 
 urxvt*font: xft:Bitstream Vera Sans Mono:style=Regular:pixelsize=13:antialias=true
-urxvt*color12: SkyBlue2
