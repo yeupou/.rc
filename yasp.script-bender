@@ -1,0 +1,97 @@
+###################################################################################################
+##########################                Yasp Script               ###############################
+################       Syntax description can be found in README.syntax     #######################
+###################################################################################################
+
+
+default title:color="white" title:font="Dejavu Sans, 13" title:shadow="Sunken" title:alignment="Center"
+default value:color="white" value:font="Dejavu Sans, 8" value:alignment="Left"
+
+title text="System"
+default interval="single"
+sensor name="KernelVersion" type="program" cmd="uname -r"
+sensor name="KernelMachine" type="program" cmd="uname -m"
+sensor name="KdeVersion" type="program" cmd=$kde4-config --version | grep KDE | sed -e "s/KDE.*(\([0-9.]*\)).*/\1/"$
+sensor name="QtVersion" type="program" cmd=$kde4-config --version | grep Qt | cut -d" " -f2$
+value key="Kernel" use="KernelVersion"
+value key="Machine" use="KernelMachine"
+value key="KDE / Qt" use="KdeVersion" use="QtVersion" format="$1 / $2"
+default interval="60000"
+sensor name="UptimeSecs" type="engine" cmd="systemmonitor:system/uptime:value"
+sensor name="UptimeDays" type="math" use="UptimeSecs" math="int $1 86400 /"
+sensor name="UptimeHours" type="math" use="UptimeSecs" use="UptimeDays" math="int $1 86400 $2 * - 3600 /"
+sensor name="UptimeMinutes" type="math" use="UptimeSecs" use="UptimeDays" use="UptimeHours" math="int $1 86400 $2 * - 3600 $3 * - 60 /"
+sensor name="LoggedUsers" type="program" cmd="users | sed -e 's/ /\n/g' | sort | uniq | xargs"
+value key="Uptime" use="UptimeDays" use="UptimeHours" use="UptimeMinutes" format="$1 day(s) $2 h $3 m"
+value key="Users" use="LoggedUsers" interval="10000"
+
+
+title text="CPU and Memory"
+default interval="2000"
+sensor name="CpuFreq" type="engine" cmd="systemmonitor:cpu/cpu0/clock:value" math="int $0"
+sensor name="Cpu0Load" type="engine" cmd="systemmonitor:cpu/cpu0/TotalLoad:value" math="int $0"
+sensor name="Cpu1Load" type="engine" cmd="systemmonitor:cpu/cpu1/TotalLoad:value" math="int $0"
+sensor name="RamApplicationMb" type="engine" cmd="systemmonitor:mem/physical/application:value" math="int $0 1024 /"
+sensor name="RamTotalMb" type="program" cmd=$cat /proc/meminfo | grep MemTotal | sed -e "s/MemTotal: *\([0-9]*\).*/\1/"$ math="int $0 1024 /" interval="single"
+sensor name="Core0Temp" type="program" cmd=%echo $(($(cat /sys/class/hwmon/hwmon0/device/temp1_input)/1000))%
+sensor name="Core1Temp" type="program" cmd=%echo $(($(cat /sys/class/hwmon/hwmon1/device/temp1_input)/1000))%
+value key="Frequency" use="CpuFreq" format="$1 MHz"
+value key="Core0 Temp" use="Core0Temp"
+value key="Core1 Temp" use="Core1Temp"
+plotter use="Cpu0Load" use="Cpu1Load" plot="$1" color="red" plot="$2" color="white" min="0" max="100" height="50"
+meter use="RamApplicationMb" use="RamTotalMb" label:0="Ram" label:1="$1 of $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
+default interval="10000"
+sensor name="SwapMbUsed" type="engine" cmd="systemmonitor:mem/swap/used:value" math="int $0 1024 /"
+sensor name="SwapMbTotal" use="SwapMbUsed" type="engine" cmd="systemmonitor:mem/swap/free:value" math="int $0 1024 / $1 +"
+meter use="SwapMbUsed" use="SwapMbTotal" label:0="Swap" label:1="$1 of $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
+
+
+title text="Network"
+default interval="2000"
+#sensor name="WLanIp" type="program" cmd=%/sbin/ifconfig wlan0 | grep "inet addr"  | cut -d":" -f 2 | cut -d" " -f1%
+sensor name="Eth0Ip" type="program" cmd=%/sbin/ifconfig eth0 | grep "inet addr"  | cut -d":" -f 2 | cut -d" " -f1%
+#sensor name="Wlan0BitRate" type="program" cmd="/sbin/iwconfig 2>/dev/null | grep 'Bit' | cut -d'=' -f2 | cut -d' ' -f1-2"
+#sensor name="Wlan0Quality" type="program" cmd="/sbin/iwconfig wlan0 2>/dev/null | grep 'Link' | cut -d = -f2 | cut -d ' ' -f1"
+#sensor name="Wlan0Essid" type="program" cmd=%/sbin/iwconfig 2>/dev/null | grep ESSID | sed -e 's/.*ESSID:"\(.*\)"/\1/'%
+default interval="2000"
+sensor name="Eth0Down" type="engine" cmd="systemmonitor:network/interfaces/eth0/receiver/data:value"
+sensor name="Eth0Up" type="engine" cmd="systemmonitor:network/interfaces/eth0/transmitter/data:value"
+#sensor name="Wlan0Down" type="engine" cmd="systemmonitor:network/interfaces/wlan0/receiver/data:value"
+#sensor name="Wlan0Up" type="engine" cmd="systemmonitor:network/interfaces/wlan0/transmitter/data:value"
+#plotter use="Eth0Down" use="Eth0Up" use="Wlan0Down" use="Wlan0Up" min="0" max="600" plot="$1" color="red" plot="$2" color="green" plot="$3" color="magenta" plot="$4" color="cyan" height="50"
+plotter use="Eth0Down" use="Eth0Up" min="0" max="600" plot="$1" color="red" plot="$2" color="green" plot="$3" color="magenta" plot="$4" color="cyan" height="50"
+value key="Ip eth0" use="Eth0Ip" interval="2000"
+value key="Download eth0" use="Eth0Down" format="$1 kB/s"
+value key="Upload eth0" use="Eth0Up" format="$1 kB/s"
+#value key="Ip wlan0" use="WLanIp" interval="2000"
+#value key="Download wlan0" use="Wlan0Down" format="$1 kB/s"
+#value key="Upload wlan0" use="Wlan0Up" format="$1 kB/s"
+#value key="Bit Rate wlan0" use="Wlan0BitRate" interval="2000"
+#value key="Link wlan0" use="Wlan0Quality" interval="2000"
+#value key="ESSID wlan0" use="Wlan0Essid" interval="2000"
+
+
+title text="Partitions"
+default interval="10000"
+sensor name="HomeUsed" type="engine" cmd="systemmonitor:partitions/home/usedspace:value" math="int $0 256 /"
+sensor name="HomeTotal" use="HomeUsed" type="engine" cmd="systemmonitor:partitions/home/freespace:value" math="int $0 256 / $1 +"
+sensor name="RootUsed" type="engine" cmd="systemmonitor:partitions//usedspace:value" math="int $0 256 /"
+sensor name="RootTotal" use="RootUsed" type="engine" cmd="systemmonitor:partitions//freespace:value" math="int $0 256 / $1  +"
+meter use="RootUsed" use="RootTotal" label:0="root" label:1="$1 Mb / $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
+meter use="HomeUsed" use="HomeTotal" label:0="home" label:1="$1 Mb / $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
+
+
+default interval="60000"
+title text="Portage"
+sensor name="LastSync" type="program" cmd=!date -f /usr/portage/metadata/timestamp.chk +"%a, %d %b %H:%M"!
+sensor name="CurrentMerge" type="program" cmd=%qatom $(qlop -cC | head -1 | cut -d' ' -f3) | tail -1 | cut -d' ' -f2%
+sensor name="CurrentETA" type="program" cmd=%genlop -cn | grep ETA | sed "s/.*ETA: \([0-9]*\).*/\1/"% math="int $0"
+sensor name="CurrentCount" type="program" cmd=%ps aux |  grep sandbox.*ebuild | grep -v grep | sed -e "s/.*\[\(.*\)\].*/\1/"%
+value key="Last sync" use="LastSync"
+value key="Current merge" use="CurrentMerge" use="CurrentCount" format="$1 $2"
+value key="Time left" use="CurrentETA" format="$1 min"
+
+default interval="3000"
+title text="Top"
+sensor name="Top" type="program" cmd="ps axo pcpu,pmem,comm --sort -%cpu | head -5"
+text use="Top" font="Monospace, 8"
