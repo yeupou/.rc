@@ -3,30 +3,58 @@
 ################       Syntax description can be found in README.syntax     #######################
 ###################################################################################################
 
-
-default title:color="white" title:font="Dejavu Sans, 13" title:shadow="Sunken" title:alignment="Center"
-default value:color="white" value:font="Dejavu Sans, 8" value:alignment="Left"
-
-title text="System"
-default interval="single"
-sensor name="KernelVersion" type="program" cmd="uname -r"
-sensor name="KernelMachine" type="program" cmd="uname -m"
-sensor name="KdeVersion" type="program" cmd=$kde4-config --version | grep KDE | sed -e "s/KDE.*(\([0-9.]*\)).*/\1/"$
-sensor name="QtVersion" type="program" cmd=$kde4-config --version | grep Qt | cut -d" " -f2$
-value key="Kernel" use="KernelVersion"
-value key="Machine" use="KernelMachine"
-value key="KDE / Qt" use="KdeVersion" use="QtVersion" format="$1 / $2"
-default interval="60000"
-sensor name="UptimeSecs" type="engine" cmd="systemmonitor:system/uptime:value"
-sensor name="UptimeDays" type="math" use="UptimeSecs" math="int $1 86400 /"
-sensor name="UptimeHours" type="math" use="UptimeSecs" use="UptimeDays" math="int $1 86400 $2 * - 3600 /"
-sensor name="UptimeMinutes" type="math" use="UptimeSecs" use="UptimeDays" use="UptimeHours" math="int $1 86400 $2 * - 3600 $3 * - 60 /"
-sensor name="LoggedUsers" type="program" cmd="users | sed -e 's/ /\n/g' | sort | uniq | xargs"
-value key="Uptime" use="UptimeDays" use="UptimeHours" use="UptimeMinutes" format="$1 day(s) $2 h $3 m"
-value key="Users" use="LoggedUsers" interval="10000"
+default interval="1500"
+default title:color="white" title:font="Dejavu Sans, 9" title:shadow="Sunken" title:alignment="Center"
+default value:color="white" value:font="Dejavu Sans, 6" value:alignment="Left"
 
 
-title text="CPU and Memory"
+# ANYTHING RELATED TO SYSTEM LOAD
+title text="Charge"
+
+# get ps output
+sensor name="ChargeTop2" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu | head -3 | tail -2" interval="5000"
+sensor name="ChargeTop6" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu | head -7 | tail -4" interval="5000"
+sensor name="ChargeTop8" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu | head -9 | tail -2" interval="5000"
+# get cpufreq-info human readable 
+sensor name="ChargeCpuFreq" type="program" cmd="cpufreq-info --freq --human"
+# use ps instead of /proc/stat so we avoid counting processes implied by this
+# sensor
+sensor name="ChargeActive" type="program" cmd="ps axr | tail -n +2 | grep -v 'ps axr' | wc -l"
+# get loadavg for the last minute and get a percentage, taking into account
+# the number of CPUs
+sensors name="ChargeLoadAvg" type="program" cmd="expr `cat /proc/loadavg  | cut -d ' ' -f 1 | tr -d .` \/ `cat /proc/cpuinfo  | grep processor | wc -l`"
+# get static data about CPU model and RAM
+sensors name="StaticCpuModel" type="program" cmd="cat /proc/cpuinfo | grep 'model name' | tail -1 | cut -d ':' -f 2" interval="single"
+sensors name="StaticMemTotal" type="program" cmd="expr `cat /proc/meminfo | grep MemTotal: | tr -d [:alpha:][:blank:][:punct:]` \/ 1000000" interval="single"
+
+text use="ChargeActive" use="ChargeLoadAvg" use="ChargeCpuFreq" format="$2 % à $3, $1 tâche(s) active(s)" alignment="center"
+text use="StaticCpuModel" use="StaticMemTotal" format="$1, $2 Go RAM" alignment="center"
+value font="Monospace, 6" use="ChargeTop2" format="$1" color="#FF9E91"
+value font="Monospace, 6" use="ChargeTop6" key=" " format="$1" icon="/usr/share/icons/oxygen/48x48/actions/office-chart-pie.png"
+value font="Monospace, 6" use="ChargeTop8" format="$1" color="#9BFFB6"
+# Graph
+
+title text="Sondes"
+
+title text="Réseau"
+
+# for several eth interface, just copy the eth0 stuff to eth1 stuff, etc
+sensor name="NetEth0Ip" type="program" cmd="/sbin/ifconfig eth0 | egrep 'inet add?r'  | cut -d ':' -f 2 | cut -d ' ' -f 1" interval="10000"
+
+
+
+
+
+sensor name="Eth0Ip" type="program" cmd=%/sbin/ifconfig eth0 | grep "inet addr" | cut -d":" -f 2 | cut -d" " -f1% 
+
+title text="Stockage"
+# type dd, espace libre
+
+title text="Système"
+# version logiciels
+
+
+title text="-- CPU, GPU et Mémoire"
 default interval="2000"
 sensor name="CpuFreq" type="engine" cmd="systemmonitor:cpu/cpu0/clock:value" math="int $0"
 sensor name="Cpu0Load" type="engine" cmd="systemmonitor:cpu/cpu0/TotalLoad:value" math="int $0"
@@ -35,9 +63,9 @@ sensor name="RamApplicationMb" type="engine" cmd="systemmonitor:mem/physical/app
 sensor name="RamTotalMb" type="program" cmd=$cat /proc/meminfo | grep MemTotal | sed -e "s/MemTotal: *\([0-9]*\).*/\1/"$ math="int $0 1024 /" interval="single"
 sensor name="Core0Temp" type="program" cmd=%echo $(($(cat /sys/class/hwmon/hwmon0/device/temp1_input)/1000))%
 sensor name="Core1Temp" type="program" cmd=%echo $(($(cat /sys/class/hwmon/hwmon1/device/temp1_input)/1000))%
-value key="Frequency" use="CpuFreq" format="$1 MHz"
-value key="Core0 Temp" use="Core0Temp"
-value key="Core1 Temp" use="Core1Temp"
+
+#value key="Core0 Temp" use="Core0Temp"
+#value key="Core1 Temp" use="Core1Temp"
 plotter use="Cpu0Load" use="Cpu1Load" plot="$1" color="red" plot="$2" color="white" min="0" max="100" height="50"
 meter use="RamApplicationMb" use="RamTotalMb" label:0="Ram" label:1="$1 of $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
 default interval="10000"
@@ -80,18 +108,3 @@ sensor name="RootTotal" use="RootUsed" type="engine" cmd="systemmonitor:partitio
 meter use="RootUsed" use="RootTotal" label:0="root" label:1="$1 Mb / $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
 meter use="HomeUsed" use="HomeTotal" label:0="home" label:1="$1 Mb / $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
 
-
-default interval="60000"
-title text="Portage"
-sensor name="LastSync" type="program" cmd=!date -f /usr/portage/metadata/timestamp.chk +"%a, %d %b %H:%M"!
-sensor name="CurrentMerge" type="program" cmd=%qatom $(qlop -cC | head -1 | cut -d' ' -f3) | tail -1 | cut -d' ' -f2%
-sensor name="CurrentETA" type="program" cmd=%genlop -cn | grep ETA | sed "s/.*ETA: \([0-9]*\).*/\1/"% math="int $0"
-sensor name="CurrentCount" type="program" cmd=%ps aux |  grep sandbox.*ebuild | grep -v grep | sed -e "s/.*\[\(.*\)\].*/\1/"%
-value key="Last sync" use="LastSync"
-value key="Current merge" use="CurrentMerge" use="CurrentCount" format="$1 $2"
-value key="Time left" use="CurrentETA" format="$1 min"
-
-default interval="3000"
-title text="Top"
-sensor name="Top" type="program" cmd="ps axo pcpu,pmem,comm --sort -%cpu | head -5"
-text use="Top" font="Monospace, 8"
