@@ -6,20 +6,21 @@
 default interval="1500"
 default title:color="white" title:font="Dejavu Sans, 9" title:shadow="Sunken" title:alignment="Center"
 default value:color="white" value:font="Dejavu Sans, 6" value:alignment="Left"
-
+man
 
 # ANYTHING RELATED TO SYSTEM LOAD
 title text="Charge"
 
-# get ps output
-sensor name="ChargeTop2" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu | head -3 | tail -2" interval="5000"
-sensor name="ChargeTop6" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu | head -7 | tail -4" interval="5000"
-sensor name="ChargeTop8" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu | head -9 | tail -2" interval="5000"
+# get ps output, ignoring migration/* cause it actually does not seem to
+# use CPU despite what ps says
+sensor name="ChargeTop2" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -2" interval="5000"
+sensor name="ChargeTop6" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -6 | tail -4" interval="5000"
+sensor name="ChargeTop8" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -8 | tail -2" interval="5000"
 # get cpufreq-info human readable 
 sensor name="ChargeCpuFreq" type="program" cmd="cpufreq-info --freq --human"
 # use ps instead of /proc/stat so we avoid counting processes implied by this
 # sensor
-sensor name="ChargeActive" type="program" cmd="ps axr | tail -n +2 | grep -v 'ps axr' | wc -l"
+sensor name="ChargeActive" type="program" cmd="ps axr --no-headers | grep -v 'ps axr' | wc -l"
 # get loadavg for the last minute and get a percentage, taking into account
 # the number of CPUs
 sensors name="ChargeLoadAvg" type="program" cmd="expr `cat /proc/loadavg  | cut -d ' ' -f 1 | tr -d .` \/ `cat /proc/cpuinfo  | grep processor | wc -l`"
