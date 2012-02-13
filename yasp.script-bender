@@ -1,7 +1,7 @@
-###################################################################################################
-##########################                Yasp Script               ###############################
-################       Syntax description can be found in README.syntax     #######################
-###################################################################################################
+##################################################
+# yasp script
+# 
+# Most of these should be portable over different GNU/Linux computers
 
 default interval="1500"
 default title:color="white" title:font="Dejavu Sans, 9" title:shadow="Sunken" title:alignment="Center"
@@ -9,6 +9,9 @@ default value:color="white" value:font="Dejavu Sans, 6" value:alignment="Left"
 man
 
 # ANYTHING RELATED TO SYSTEM LOAD
+# Skip memory/swap used space. In theory, we should always use 100% RAM and 0%
+# RAM, so knowing that memory is 40% used (buffered? cached?) isn't really
+# helpful. Checking RAM/swap I/O and such is way more relevant.
 title text="Charge"
 
 # get ps output, ignoring migration/* cause it actually does not seem to
@@ -26,27 +29,38 @@ sensor name="ChargeActive" type="program" cmd="ps axr --no-headers | grep -v 'ps
 sensors name="ChargeLoadAvg" type="program" cmd="expr `cat /proc/loadavg  | cut -d ' ' -f 1 | tr -d .` \/ `cat /proc/cpuinfo  | grep processor | wc -l`"
 # get static data about CPU model and RAM
 sensors name="StaticCpuModel" type="program" cmd="cat /proc/cpuinfo | grep 'model name' | tail -1 | cut -d ':' -f 2" interval="single"
+sensors name="StaticCpuCount" type="program" cmd="cat /proc/cpuinfo  | grep processor | wc -l" interval="single"
 sensors name="StaticMemTotal" type="program" cmd="expr `cat /proc/meminfo | grep MemTotal: | tr -d [:alpha:][:blank:][:punct:]` \/ 1000000" interval="single"
 
-text use="ChargeActive" use="ChargeLoadAvg" use="ChargeCpuFreq" format="$2 % à $3, $1 tâche(s) active(s)" alignment="center"
-text use="StaticCpuModel" use="StaticMemTotal" format="$1, $2 Go RAM" alignment="center"
+text use="StaticCpuModel" use="StaticCpuCount" use="StaticMemTotal" format="$2 x $1, $3 Go RAM" alignment="center"
+text use="ChargeActive" use="ChargeLoadAvg" use="ChargeCpuFreq" format="$2 % à $3, $1 tâche(s) active(s)" alignment="center" color="#E3D5FF"
+plotter use="ChargeLoadAvg" plot="$1" color="#E3D5FF" height="50" min="0" max="100"
 value font="Monospace, 6" use="ChargeTop2" format="$1" color="#FF9E91"
 value font="Monospace, 6" use="ChargeTop6" key=" " format="$1" icon="/usr/share/icons/oxygen/48x48/actions/office-chart-pie.png"
 value font="Monospace, 6" use="ChargeTop8" format="$1" color="#9BFFB6"
-# Graph
+
 
 title text="Sondes"
 
 title text="Réseau"
+# in case of plurality of eth interfaces, just copy the eth0 stuff
+# to eth(n) stuff, etc
+# requires ethtool
+sensor name="NetGateway" type="program" cmd="nslookup `route -n | grep UG  |awk '{print $2}'` | grep name | cut -d = -f 2 | sed s/\.$//;" interval="10000"
+#IF THE PREVIOUS DOES NOT WORK (no domain) sensor name="NetGateway" type="program" cmd="route -n | grep UG  |awk '{print $2}'" interval="10000"
 
-# for several eth interface, just copy the eth0 stuff to eth1 stuff, etc
 sensor name="NetEth0Ip" type="program" cmd="/sbin/ifconfig eth0 | egrep 'inet add?r'  | cut -d ':' -f 2 | cut -d ' ' -f 1" interval="10000"
+sensor name="NetEth0Speed" type="program" cmd="/sbin/ethtool eth0 2>/dev/null | grep Speed: | cut -d ' ' -f 2 | sed 's/\([0-9]*\)\([^0-9]*\)/\1 \2/g;'" interval="10000"
+
+sensor name="NetEth0Down" type="engine" cmd="systemmonitor:network/interfaces/eth0/receiver/data:value"
+sensor name="NetEth0Up" type="engine" cmd="systemmonitor:network/interfaces/eth0/transmitter/data:value"
+
+text use="NetEth0Ip" use="NetEth0Speed" format="$1 sur eth0 à $2" alignment="center"
+value key=" " use="NetGateway" use="NetEth0Down" format="$1 => $2 ko/s" color="#FFFFC0"
+value key=" " use="NetGateway" use="NetEth0Up" format="$1 <= $2 ko/s" color="#62FFEA"
+plotter use="NetEth0Down" use="NetEth0Up" plot="$1" color="#FFFFC0" plot="$2" color="#62FFEA" height="50"
 
 
-
-
-
-sensor name="Eth0Ip" type="program" cmd=%/sbin/ifconfig eth0 | grep "inet addr" | cut -d":" -f 2 | cut -d" " -f1% 
 
 title text="Stockage"
 # type dd, espace libre
@@ -73,31 +87,6 @@ default interval="10000"
 sensor name="SwapMbUsed" type="engine" cmd="systemmonitor:mem/swap/used:value" math="int $0 1024 /"
 sensor name="SwapMbTotal" use="SwapMbUsed" type="engine" cmd="systemmonitor:mem/swap/free:value" math="int $0 1024 / $1 +"
 meter use="SwapMbUsed" use="SwapMbTotal" label:0="Swap" label:1="$1 of $2 Mb" alignment:1="right" min="0" max="$2" value="$1"
-
-
-title text="Network"
-default interval="2000"
-#sensor name="WLanIp" type="program" cmd=%/sbin/ifconfig wlan0 | grep "inet addr"  | cut -d":" -f 2 | cut -d" " -f1%
-sensor name="Eth0Ip" type="program" cmd=%/sbin/ifconfig eth0 | grep "inet addr"  | cut -d":" -f 2 | cut -d" " -f1%
-#sensor name="Wlan0BitRate" type="program" cmd="/sbin/iwconfig 2>/dev/null | grep 'Bit' | cut -d'=' -f2 | cut -d' ' -f1-2"
-#sensor name="Wlan0Quality" type="program" cmd="/sbin/iwconfig wlan0 2>/dev/null | grep 'Link' | cut -d = -f2 | cut -d ' ' -f1"
-#sensor name="Wlan0Essid" type="program" cmd=%/sbin/iwconfig 2>/dev/null | grep ESSID | sed -e 's/.*ESSID:"\(.*\)"/\1/'%
-default interval="2000"
-sensor name="Eth0Down" type="engine" cmd="systemmonitor:network/interfaces/eth0/receiver/data:value"
-sensor name="Eth0Up" type="engine" cmd="systemmonitor:network/interfaces/eth0/transmitter/data:value"
-#sensor name="Wlan0Down" type="engine" cmd="systemmonitor:network/interfaces/wlan0/receiver/data:value"
-#sensor name="Wlan0Up" type="engine" cmd="systemmonitor:network/interfaces/wlan0/transmitter/data:value"
-#plotter use="Eth0Down" use="Eth0Up" use="Wlan0Down" use="Wlan0Up" min="0" max="600" plot="$1" color="red" plot="$2" color="green" plot="$3" color="magenta" plot="$4" color="cyan" height="50"
-plotter use="Eth0Down" use="Eth0Up" min="0" max="600" plot="$1" color="red" plot="$2" color="green" plot="$3" color="magenta" plot="$4" color="cyan" height="50"
-value key="Ip eth0" use="Eth0Ip" interval="2000"
-value key="Download eth0" use="Eth0Down" format="$1 kB/s"
-value key="Upload eth0" use="Eth0Up" format="$1 kB/s"
-#value key="Ip wlan0" use="WLanIp" interval="2000"
-#value key="Download wlan0" use="Wlan0Down" format="$1 kB/s"
-#value key="Upload wlan0" use="Wlan0Up" format="$1 kB/s"
-#value key="Bit Rate wlan0" use="Wlan0BitRate" interval="2000"
-#value key="Link wlan0" use="Wlan0Quality" interval="2000"
-#value key="ESSID wlan0" use="Wlan0Essid" interval="2000"
 
 
 title text="Partitions"
