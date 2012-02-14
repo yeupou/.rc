@@ -67,9 +67,9 @@ sensors name="SensorsChassis3FanSpeed" type="engine" cmd="systemmonitor:lmsensor
 sensors name="SensorsChassis4FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS4_FAN_FAN_Speed:value" math="int $0" interval="5000"
 
 # hddtempd
-sensors name="SensorsHdd1Temp" type="program" cmd=%netcat localhost 7634 | awk --field-separator \| '{print $4" °C pour "$3}'% interval="5000"
-sensors name="SensorsHdd2Temp" type="program" cmd=%netcat localhost 7634 | awk --field-separator \| '{print $9" °C pour "$8}'% interval="5000"
-sensors name="SensorsHdd3Temp" type="program" cmd=%netcat localhost 7634 | awk --field-separator \| '{print $14" °C pour "$13}'% interval="5000"
+sensors name="SensorsHdd1Temp" type="program" cmd=%netcat localhost 7634 | awk -F \| '{print $4" °C pour "$3}'% interval="5000"
+sensors name="SensorsHdd2Temp" type="program" cmd=%netcat localhost 7634 | awk -F \| '{print $9" °C pour "$8}'% interval="5000"
+sensors name="SensorsHdd3Temp" type="program" cmd=%netcat localhost 7634 | awk -F \| '{print $14" °C pour "$13}'% interval="5000"
 
 value key="Processeur :" use="SensorsCPUTemp" use="SensorsCPUFanSpeed" format="$1 °C, $2 trs/min" interval="5000"
 value key="Carte graphique :" use="SensorsGPUTemp" format="$1 °C" interval="5000"

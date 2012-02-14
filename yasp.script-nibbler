@@ -60,7 +60,7 @@ title text="Sondes"
 sensors name="SensorsCPUTemp" type="engine" cmd="systemmonitor:lmsensors/acpitz-virtual-0/CPU_Temperature:value" math="int $0" interval="5000"
 
 # hddtempd
-sensors name="SensorsHdd1Temp" type="program" cmd=%netcat localhost 7634 | awk --field-separator \| '{print $4" °C pour "$3}'% interval="5000"
+sensors name="SensorsHdd1Temp" type="program" cmd=%netcat localhost 7634 | awk -F \| '{print $4" °C pour "$3}'% interval="5000"
 
 #value key="Processeur :" use="SensorsCPUTemp" use="SensorsCPUFanSpeed" format="$1 °C, $2 trs/min" interval="5000"
 value key="Processeur :" use="SensorsCPUTemp" format="$1 °C" interval="5000"
