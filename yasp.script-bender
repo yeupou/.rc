@@ -76,7 +76,7 @@ title text="Système"
 
 sensors name="StaticSysOS" type="program" cmd="lsb_release -sd" interval="single"
 sensors name="StaticSysKernel" type="program" cmd="uname --kernel-name --kernel-release" interval="single"
-sensors name="SysAptGet" type="program" cmd="apt-get --quiet --simulate --yes dist-upgrade | grep ^Inst\ | wc -l" interval="60000"
+sensors name="SysAptGet" type="program" cmd="apt-get --quiet --simulate --yes dist-upgrade | grep ^Inst\ | wc -l" interval="1800000"
 value key=" " use="StaticSysOS" use="StaticSysKernel" use="SysAptGet" format="$1\n$2\n$3 paquets à installer/mettre à jour\n\n" icon="/usr/share/icons/oxygen/48x48/apps/system-software-update.png"
 
 
