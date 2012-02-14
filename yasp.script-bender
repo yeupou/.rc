@@ -106,8 +106,25 @@ plotter use="NetEth0Down" use="NetEth0Up" plot="$1" color="#FFFFC0" plot="$2" co
 
 ## STORAGE
 ##
+# (convert kilobytes to human readable Gb, 1048576 = 1) 
 title text="Stockage"
-# type dd, espace libre
+
+sensor name="StorageRootAvailable" type="engine" cmd="systemmonitor:partitions//freespace:value" math="int $0" interval="180000"
+sensor name="StorageRootAvailableGb" type="math" use="StorageRootAvailable" math="int $1 1048576 /" interval="180000"
+sensor name="StorageRootUsed" type="engine" cmd="systemmonitor:partitions//usedspace:value" math="int $0" interval="180000"
+sensor name="StorageRootTotal" use="StorageRootAvailable" use="StorageRootUsed" type="math" math="int $1 $2 +" interval="180000"
+sensor name="StorageRootTotalGb" type="math" use="StorageRootTotal" math="int $1 1000000 /" interval="180000"
+
+sensor name="StorageHomeAvailable" type="engine" cmd="systemmonitor:partitions/home/freespace:value" math="int $0" interval="180000"
+sensor name="StorageHomeAvailableGb" type="math" use="StorageHomeAvailable" math="int $1 1048576 /" interval="180000"
+sensor name="StorageHomeUsed" type="engine" cmd="systemmonitor:partitions/home/usedspace:value" math="int $0" interval="180000"
+sensor name="StorageHomeTotal" use="StorageHomeAvailable" use="StorageHomeUsed" type="math" math="int $1 $2 +" interval="180000"
+sensor name="StorageHomeTotalGb" type="math" use="StorageHomeTotal" math="int $1 1000000 /" interval="180000"
+
+meter use="StorageRootUsed" use="StorageRootTotal" use="StorageRootAvailableGb" use="StorageRootTotalGb"  label:0="/ :" label:1="reste $3 sur $4 Go" alignment:1="right" min="0" max="$2" value="$1" interval="180000"
+meter use="StorageHomeUsed" use="StorageHomeTotal" use="StorageHomeAvailableGb" use="StorageHomeTotalGb"  label:0="/home :" label:1="reste $3 sur $4 Go" alignment:1="right" min="0" max="$2" value="$1" interval="180000"
+
+
 
 ## (OPERATING) SYSTEM
 ##
