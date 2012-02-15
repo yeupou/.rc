@@ -34,7 +34,7 @@ sensors name="StaticMemTotal" type="program" cmd="expr `cat /proc/meminfo | grep
 
 # get loadavg for the last minute and get a percentage, taking into account
 # the number of CPUs
-sensors name="ChargeLoadAvg" type="engine" cmd="systemmonitor:cpu/system/loadavg1:value" math="double $1 100 *" interval="1500"
+sensors name="ChargeLoadAvg" type="engine" cmd="systemmonitor:cpu/system/loadavg1:value" math="double $0 100 *" interval="1500"
 sensors name="ChargeLoadAvgCorrected" use="ChargeLoadAvg" use="StaticCpuCount" type="math" math="int $1 $2 /" interval="1500"
 
 # Output
