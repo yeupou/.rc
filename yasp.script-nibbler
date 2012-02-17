@@ -20,8 +20,8 @@ title text="Charge"
 # get ps output, ignoring migration/* cause it actually does not seem to
 # use CPU despite what ps says
 sensor name="ChargeTop2" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -2" interval="8000"
-sensor name="ChargeTop6" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -6 | tail -4" interval="8000"
-sensor name="ChargeTop8" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -8 | tail -2" interval="8000"
+sensor name="ChargeTop6" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -8 | tail -6" interval="8000"
+#sensor name="ChargeTop8" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -8 | tail -2" interval="8000"
 
 # get cpufreq-info human readable 
 # (systemmonitor:cpu/system/AverageClock:value)
@@ -43,7 +43,7 @@ value key=" " use="ChargeLoadAvgCorrected" use="ChargeCpuFreq" format="$1 % à $
 plotter use="ChargeLoadAvgCorrected" plot="$1" color="#E3D5FF" height="50" min="0" max="100" interval="1500"
 value font="Monospace, 7" use="ChargeTop2" format="$1" color="#FF9E91"  interval="8000"
 value font="Monospace, 7" use="ChargeTop6" key=" " format="$1" icon="/usr/share/icons/oxygen/48x48/actions/office-chart-pie.png"  interval="8000"
-value font="Monospace, 7" use="ChargeTop8" format="$1" color="#9BFFB6"  interval="8000"
+#value font="Monospace, 7" use="ChargeTop8" format="$1" color="#9BFFB6"  interval="8000"
 
 ## SENSORS
 ##
