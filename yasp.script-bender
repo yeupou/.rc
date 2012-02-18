@@ -58,7 +58,7 @@ title text="Sondes"
 
 # lmsensors 
 sensors name="SensorsGPUTemp" type="engine" cmd="systemmonitor:lmsensors/radeon-pci-0200/GPU_Temperature:value" math="int $0" interval="5000"
-sensors name="SensorsCPUTemp" type="engine" cmd="systemmonitor:lmsensors/k10temp-pci-00c3/CPU_Temperature:value" math="int $0" interval="5000"
+sensors name="SensorsCPUTemp" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CPU_Temperature:value" math="int $0" interval="5000"
 sensors name="SensorsCPUFanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CPU_FAN_Speed:value" math="int $0" interval="5000"
 # IGNORE, always almost the same than CPU sensors name="SensorsMBTemp" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/MB_Temperature:value" interval="5000"
 sensors name="SensorsChassis1FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS_FAN_Speed:value" math="int $0" interval="5000"
