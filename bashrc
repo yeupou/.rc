@@ -33,5 +33,6 @@ alias t+='ls /stockage/torrent/watch/*+'
 
 alias uu='~/.unison.sh'
 
+alias pgit='git push && git push github'
 
 # EOF
