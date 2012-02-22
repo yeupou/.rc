@@ -25,11 +25,11 @@ alias redshift='redshift -l 48.799:2.505 -t 6500:9300'
 alias redoff='redshift -o -t 6500:6500'
 alias redon='redshift -o -t 6500:9300'
 
-alias tcd='cd /stockage/torrent/watch/'
-alias tl='tail -n 100 /stockage/torrent/watch/log'
-alias ts='cat /stockage/torrent/watch/status'
-alias t='ls /stockage/torrent/watch/*.hash'
-alias t+='ls /stockage/torrent/watch/*+'
+alias tcd='cd /mnt/lan/gate.stalag13.ici/watch/'
+alias tl='tail -n 100 /mnt/lan/gate.stalag13.ici/watch/log'
+alias ts='cat /mnt/lan/gate.stalag13.ici/watch/status'
+alias t='ls /mnt/lan/gate.stalag13.ici/watch/*.hash'
+alias t+='ls /mnt/lan/gate.stalag13.ici/watch/*+'
 
 alias uu='~/.unison.sh'
 
