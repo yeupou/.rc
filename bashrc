@@ -35,4 +35,7 @@ alias uu='~/.unison.sh'
 
 alias pgit='git push && git push github'
 
+alias im2gif='convert -delay 60 -loop 0 +dither -colors 256 -depth 8 -deconstruct $1' # $1 = *.jpg output.gif
+
+
 # EOF
