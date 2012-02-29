@@ -21,7 +21,7 @@ export EDITOR="emacs"
 export CVS_RSH="ssh"
 
 # useful/less aliases
-alias redshift='redshift -l 48.799:2.505'
+alias redshift='redshift -l 48.799:2.505 -t 6200:3700'
 
 alias tcd='cd /mnt/lan/gate.stalag13.ici/watch/'
 alias tl='tail -n 100 /mnt/lan/gate.stalag13.ici/watch/log'
