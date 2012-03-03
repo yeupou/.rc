@@ -19,9 +19,7 @@ title text="Charge"
 
 # get ps output, ignoring migration/* cause it actually does not seem to
 # use CPU despite what ps says
-sensor name="ChargeTop2" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -2" interval="8000"
-sensor name="ChargeTop6" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -8 | tail -6" interval="8000"
-#sensor name="ChargeTop8" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -8 | tail -2" interval="8000"
+sensor name="ChargeTop" type="program" cmd="ps axo comm,user,pcpu,pmem --sort -%cpu --no-headers | grep -v 'migration/' | head -8" interval="8000"
 
 # get cpufreq-info human readable 
 # (systemmonitor:cpu/system/AverageClock:value)
