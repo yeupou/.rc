@@ -35,7 +35,7 @@ alias pgit='git push && git push github'
 
 alias im2gif='convert -loop 0 +dither -colors 256 -depth 8 -deconstruct $1' # [-delay 60] [-resize x350] $1 = *.jpg output.gif
 
-alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do ssh root@$host "apt-get update && apt-get dist-upgrade && debfoster"; done' 
+alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "apt-get update && apt-get dist-upgrade && debfoster && etckeeper commit \"Dist-upgrade\""; done' 
 
 
 # EOF
