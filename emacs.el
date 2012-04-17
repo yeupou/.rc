@@ -36,7 +36,7 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "#3d3d3d" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :family "courier"))))
+ '(default ((t (:stipple nil :background "#3d3d3d" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :foundry "bitstream" :family "Bitstream Vera Sans Mono"))))
  '(bold-italic ((t (:underline "cyan" :slant italic :weight bold))))
  '(border ((t nil)))
  '(cursor ((t (:background "#73DAE1" :foreground "white"))))
@@ -84,9 +84,30 @@
 (setq display-time-day-and-date t)
 
 ;; Selection related
-(custom-set-variables '(pc-select-meta-moves-sexps t))
-(custom-set-variables '(pc-selection-mode t nil (pc-select)))
-(custom-set-variables '(x-select-enable-clipboard nil))
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(case-fold-search t)
+ '(display-time-24hr-format t)
+ '(global-font-lock-mode t nil (font-lock))
+ '(message-directory "~/.Mail/" t)
+ '(mouse-sel-mode nil nil (mouse-sel) "When Mouse Sel mode is enabled, mouse s
+ection is enhanced in various ways.")
+ '(mouse-wheel-mode t nil (mwheel))
+ '(pc-select-meta-moves-sexps t)
+ '(pc-selection-mode t nil (pc-select))
+ '(read-mail-command (quote gnus))
+ '(save-place t nil (saveplace))
+ '(show-paren-mode t nil (paren))
+ '(spell-command "aspell")
+ '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
+ '(tool-bar-mode nil)
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify))
+ '(x-select-enable-clipboard nil))
+
+
 
 ;; Also defined in .gnus.el
 ;; avoid apparition of ~/Mail/.
