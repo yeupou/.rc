@@ -24,10 +24,11 @@ export CVS_RSH="ssh"
 alias redshift='cd tmprm && nohup redshift -l 48.799:2.505 -t 6200:3700'
 
 alias tcd='cd /mnt/lan/gate.stalag13.ici/watch/'
+alias tcdd='cd /mnt/lan/gate.stalag13.ici/download/'
 alias tl='tail -n 100 /mnt/lan/gate.stalag13.ici/watch/log'
 alias ts='cat /mnt/lan/gate.stalag13.ici/watch/status'
-alias t='ls /mnt/lan/gate.stalag13.ici/watch/*.hash'
-alias t+='ls /mnt/lan/gate.stalag13.ici/watch/*+'
+alias t='tcd && ls *.trs'
+alias t+='tcd && ls *.trs+'
 
 alias uu='~/.unison.sh'
 
@@ -35,7 +36,8 @@ alias pgit='git push && git push github'
 
 alias im2gif='convert -loop 0 +dither -colors 256 -depth 8 -deconstruct $1' # [-delay 60] [-resize x350] $1 = *.jpg output.gif
 
-alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "apt-get update && apt-get dist-upgrade && debfoster && etckeeper commit \"Dist-upgrade\""; done' 
-
+APTGETTROLOLOLOLO='apt-get update && apt-get dist-upgrade && debfoster && cd /etc && git log --stat --pretty=format:"%s of %aD" > /root/changelog.etc && head -n 15 /root/changelog.etc'
+alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && su -c "$APTGETTROLOLOLOLO"' 
+alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
 
 # EOF
