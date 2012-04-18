@@ -30,7 +30,7 @@ alias ts='cat /mnt/lan/gate.stalag13.ici/watch/status'
 alias t='tcd && ls *.trs'
 alias t+='tcd && ls *.trs+'
 
-alias uu='~/.unison.sh'
+alias uu='cd ~/ && ~/.unison.sh'
 
 alias pgit='git push && git push github'
 
