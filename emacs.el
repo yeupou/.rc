@@ -23,12 +23,11 @@
 
 ;;*******************
 ;; Always do UTF8
-
 (prefer-coding-system 'utf-8)
 
 
 ;;*******************
-;; FACES
+;; COSMETICS
 
 ;; Cosmetics
 (custom-set-faces
@@ -79,7 +78,6 @@
 
 ;;**********************
 ;; SHORTCUFS, PREFS
-
 (setq display-time-24hr-format t)
 (setq display-time-day-and-date t)
 
@@ -107,8 +105,6 @@ ection is enhanced in various ways.")
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
  '(x-select-enable-clipboard nil))
 
-
-
 ;; Also defined in .gnus.el
 ;; avoid apparition of ~/Mail/.
 (setq gnus-directory "~/.News/")
@@ -119,10 +115,7 @@ ection is enhanced in various ways.")
 
 ;;*******************
 ;; MODES
-;; You should comment-out modes not installed on your computer.
-
-;; Extend load path.
-(setq load-path (cons "~/.rc/mylisp" load-path))
+;; Comment-out modes not installed on your computer.
 
 ;; Little bar cursor instead of a block. Easier for me.
 (require 'bar-cursor)
@@ -147,6 +140,18 @@ ection is enhanced in various ways.")
 (define-auto-insert "\.php" "template.php")
 (define-auto-insert "\.css" "c-template.c")
 (define-auto-insert "\.c" "c-template.c") 
+
+;;*******************
+;; FUNCTIONS
+
+;; Word counts, stats about words
+(defun word-count nil
+  "Count words in the buffer or active region using wc"
+  (interactive)
+  (if mark-active
+      (shell-command-on-region (point) (mark) "wc -w")
+    (shell-command-on-region (point-min) (point-max) "wc -w")))
+(defalias 'wc 'word-count)
 
 (message "Loading ~/.emacs.el...")
 ;; EOF

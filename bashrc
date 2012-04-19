@@ -40,4 +40,22 @@ APTGETTROLOLOLOLO='apt-get update && apt-get dist-upgrade && debfoster && cd /et
 alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $HOSTNAME:\033[0m" && su -c "$APTGETTROLOLOLOLO"' 
 alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
 
+function word-analysis {
+    for word in `tr -cs 'A-Za-z' '\n' < $1 | sort -u`; do
+	length=`echo $word | wc -m`
+	if [[ "$length" -gt 4 ]]; then
+	    count=`tr -cs 'A-Za-z' '\n' < $1 | grep -c $word`
+	    if [[ "$count" -gt 2 ]]; then 
+		echo -n "$count $word, "
+	    fi
+	fi
+    done
+    echo
+
+    echo `wc --chars < $1`" mots"
+    echo `wc --lines < $1`" lignes"
+    
+}
+
+
 # EOF
