@@ -55,7 +55,8 @@ function word-analysis {
     done
     echo
 
-    echo `wc --chars < $1`" mots, dont $gcount souvent répétés"
+    echo `wc --chars < $1`" charactères"
+    echo `wc --words < $1`" mots, dont $gcount souvent répétés"
     echo `wc --lines < $1`" lignes"
     
 }
