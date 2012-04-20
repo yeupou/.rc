@@ -41,18 +41,21 @@ alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper =>
 alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
 
 function word-analysis {
+    echo "== Contenu de $1 =="
+    gcount=0
     for word in `tr '[:punct:][:space:]' '\n' < $1 | sort -u`; do
 	length=`echo $word | wc -m`
 	if [[ "$length" -gt 4 ]]; then
 	    count=`tr '[:punct:][:space:]' '\n' < $1 | grep -c $word`
 	    if [[ "$count" -gt 2 ]]; then 
 		echo -n "$count $word, "
+		gcount=`expr $gcount \+ 1`
 	    fi
 	fi
     done
     echo
 
-    echo `wc --chars < $1`" mots"
+    echo `wc --chars < $1`" mots, dont $gcount souvent répétés"
     echo `wc --lines < $1`" lignes"
     
 }
