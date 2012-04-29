@@ -23,13 +23,6 @@ export CVS_RSH="ssh"
 # useful/less aliases
 alias redshift='cd tmprm && nohup redshift -l 48.799:2.505 -t 6200:3700'
 
-alias tcd='cd /mnt/lan/gate.stalag13.ici/watch/'
-alias tcdd='cd /mnt/lan/gate.stalag13.ici/download/'
-alias tl='tail -n 100 /mnt/lan/gate.stalag13.ici/watch/log'
-alias ts='cat /mnt/lan/gate.stalag13.ici/watch/status'
-alias t='tcd && ls *.trs'
-alias t+='tcd && ls *.trs+'
-
 alias uu='cd ~/ && ~/.unison.sh'
 
 alias pgit='git push && git push github'

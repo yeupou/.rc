@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-# Copyright (c) 2011 Mathieu Roy <yeupou--gnu.org>
+# Copyright (c) 2012 Mathieu Roy <yeupou--gnu.org>
+#      http://yeupou.wordpress.com
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
