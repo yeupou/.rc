@@ -56,13 +56,15 @@ title text="Sondes"
 
 # lmsensors 
 sensors name="SensorsCPUTemp" type="engine" cmd="systemmonitor:lmsensors/acpitz-virtual-0/CPU_Temperature:value" math="int $0" interval="5000"
+sensors name="SensorsCaseFanSpeed" type="engine" cmd="systemmonitor:lmsensors/i8k-virtual-0/Left_Fan:value" math="int $0" interval="5000"
+sensors name="SensorsCPUFanSpeed" type="engine" cmd="systemmonitor:lmsensors/i8k-virtual-0/Right_Fan:value"math="int $0" interval="5000"
 
 # hddtempd
 sensors name="SensorsHdd1Temp" type="program" cmd=%netcat localhost 7634 | awk -F \| '{print $4" °C pour "$3}'% interval="5000"
 
-#value key="Processeur :" use="SensorsCPUTemp" use="SensorsCPUFanSpeed" format="$1 °C, $2 trs/min" interval="5000"
-value key="Processeur :" use="SensorsCPUTemp" format="$1 °C" interval="5000"
-#value key="Carte graphique :" use="SensorsGPUTemp" format="$1 °C" interval="5000"
+
+value key="Processeur :" use="SensorsCPUTemp" use="SensorsCPUFanSpeed" format="$1 °C, $2 trs/min" interval="5000"
+value key="Boitier :" use="SensorsCaseFanSpeed" format="$1 trs/min" interval="5000"
 value key="Disque dur :" use="SensorsHdd1Temp" format="$1" interval="5000"
 #value key="" use="SensorsHdd2Temp" format="$1" interval="5000"
 #value key="" use="SensorsHdd3Temp" format="$1" interval="5000"

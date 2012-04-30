@@ -8,6 +8,10 @@ case `hostname` in
 	xscreensaver -no-splash &
 	wmaker
 	;;
+    nibbler)
+	export BROWSER=midori
+	startxfce4
+	;;
     *)
 	
 	export BROWSER=konqueror
