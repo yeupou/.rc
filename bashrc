@@ -1,3 +1,4 @@
+# -*- sh -*-
 # interactive non-login shell
 # Copyleft http://yeupou.wordpress.com
 

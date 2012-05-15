@@ -1,4 +1,4 @@
-#-*- mode: sh -*-
+# -*- sh -*-
 
 case `hostname` in 
     otto|ulysse)

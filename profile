@@ -1,3 +1,4 @@
+# -*- sh -*-
 # interactive login shell, or with --login,
 # sourced after /etc/profile
 
