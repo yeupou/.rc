@@ -1,14 +1,9 @@
 # -*- sh -*-
-# interactive non-login shell
 # Copyleft http://yeupou.wordpress.com
-
-# make sure site-wide conf was sourced
-. /etc/profile
-if [ -f /etc/bash.bashrc ]; then
-    . /etc/bash.bashrc
-elif [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-fi
+# interactive non-login shell source:
+#
+# /etc/bash.bashrc ...
+#   ~/.bashrc
 
 # shell behavior
 export PATH="$PATH:/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin"
@@ -54,6 +49,5 @@ function word-analysis {
     echo `wc --lines < $1`" lignes"
     
 }
-
 
 # EOF
