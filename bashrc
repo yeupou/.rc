@@ -35,7 +35,7 @@ function word-analysis {
     for word in `tr '[:punct:][:space:]' '\n' < $1 | sort -u`; do
 	length=`echo $word | wc -m`
 	if [[ "$length" -gt 4 ]]; then
-	    count=`tr '[:punct:][:space:]' '\n' < $1 | grep -c $word`
+	    count=`tr '[:punct:][:space:]' '\n' < $1 | grep -c ^$word$`
 	    if [[ "$count" -gt 2 ]]; then 
 		echo -n "$count $word, "
 		gcount=`expr $gcount \+ 1`
