@@ -20,6 +20,7 @@ export CVS_RSH="ssh"
 alias redshift='cd tmprm && nohup redshift -l 48.799:2.505 -t 6200:3700'
 
 alias uu='cd ~/ && ~/.unison.sh'
+alias urc='cd ~/.rc && git pull'
 
 alias pgit='git push && git push github'
 
@@ -31,16 +32,32 @@ alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\
 
 function word-analysis {
     echo "== Contenu de $1 =="
-    gcount=0
+    dict=/usr/share/dict/words
+    gcount=0 # frequent words count
+
+    # go through the words list
     for word in `tr '[:punct:][:space:]' '\n' < $1 | sort -u`; do
-	length=`echo $word | wc -m`
-	if [[ "$length" -gt 4 ]]; then
-	    count=`tr '[:punct:][:space:]' '\n' < $1 | grep -c ^$word$`
-	    if [[ "$count" -gt 2 ]]; then 
-		echo -n "$count $word, "
-		gcount=`expr $gcount \+ 1`
-	    fi
+	# count chars and take into account only if 4 at least
+	# (wc -m = n+1)
+	if [[ `echo $word | wc -m` -lt 5 ]]; then
+	    continue
 	fi
+	
+	# count occurences, take into account only if 3 at least
+	count=`tr '[:punct:][:space:]' '\n' < $1 | grep -c ^$word$`
+	if [[ "$count" -lt 3 ]]; then 
+	    continue
+	fi
+
+	# check if the word in in the dictionary (cpu consuming, so last
+	# test being made)
+	if [[ `grep -c ^$word$ $dict` -lt 1 ]]; then
+	    continue		
+	fi
+	
+	# register only if we reach here 
+	echo -n "$count $word, "
+	gcount=`expr $gcount \+ 1`
     done
     echo
 
