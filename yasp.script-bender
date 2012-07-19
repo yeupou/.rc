@@ -64,7 +64,7 @@ sensors name="SensorsCPUFanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk
 # IGNORE, always almost the same than CPU sensors name="SensorsMBTemp" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/MB_Temperature:value" interval="5000"
 sensors name="SensorsChassis1FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS_FAN_Speed:value" math="int $0" interval="5000"
 sensors name="SensorsChassis2FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS2_FAN_FAN_Speed:value" math="int $0" interval="5000"
-sensors name="SensorsChassis3FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS3_FAN_FAN_Speed:value" math="int $0" interval="5000"
+#sensors name="SensorsChassis3FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS3_FAN_FAN_Speed:value" math="int $0" interval="5000"
 sensors name="SensorsChassis4FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS4_FAN_FAN_Speed:value" math="int $0" interval="5000"
 
 # hddtempd
@@ -77,10 +77,10 @@ value key="Carte graphique :" use="SensorsGPUTemp" format="$1 °C" interval="500
 value key="Disques durs :" use="SensorsHdd1Temp" format="$1" interval="5000"
 value key="" use="SensorsHdd2Temp" format="$1" interval="5000"
 value key="" use="SensorsHdd3Temp" format="$1" interval="5000"
-value key="Boitier :" use="SensorsChassis1FanSpeed" format="$1 trs/min à l'avant" interval="5000"
-value key=" " use="SensorsChassis2FanSpeed" format="$1 trs/min à l'arrière" interval="5000"
-value key=" " use="SensorsChassis3FanSpeed" format="$1 trs/min vers le processeur" interval="5000"
-value key=" " use="SensorsChassis4FanSpeed" format="$1 trs/min vers la carte graphique" interval="5000"
+value key="Boitier :" use="SensorsChassis1FanSpeed" format="$1 trs/min vers l'avant" interval="5000"
+value key=" " use="SensorsChassis2FanSpeed" format="$1 trs/min depuis l'arrière" interval="5000"
+#value key=" " use="SensorsChassis3FanSpeed" format="$1 trs/min vers le processeur" interval="5000"
+value key=" " use="SensorsChassis4FanSpeed" format="$1 trs/min depuis le côté" interval="5000"
 
 
 
