@@ -155,3 +155,4 @@ ection is enhanced in various ways.")
 
 (message "Loading ~/.emacs.el...")
 ;; EOF
+(put 'scroll-left 'disabled nil)

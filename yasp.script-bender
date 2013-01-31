@@ -58,14 +58,14 @@ value font="Monospace, 6" use="ChargeTop8" format="$1" color="#9BFFB6"  interval
 title text="Sondes"
 
 # lmsensors 
-sensors name="SensorsGPUTemp" type="engine" cmd="systemmonitor:lmsensors/radeon-pci-0200/GPU_Temperature:value" math="int $0" interval="5000"
-sensors name="SensorsCPUTemp" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CPU_Temperature:value" math="int $0" interval="5000"
-sensors name="SensorsCPUFanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CPU_FAN_Speed:value" math="int $0" interval="5000"
-# IGNORE, always almost the same than CPU sensors name="SensorsMBTemp" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/MB_Temperature:value" interval="5000"
-sensors name="SensorsChassis1FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS_FAN_Speed:value" math="int $0" interval="5000"
-sensors name="SensorsChassis2FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS2_FAN_FAN_Speed:value" math="int $0" interval="5000"
-#sensors name="SensorsChassis3FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS3_FAN_FAN_Speed:value" math="int $0" interval="5000"
-sensors name="SensorsChassis4FanSpeed" type="engine" cmd="systemmonitor:lmsensors/atk0110-acpi-0/CHASSIS4_FAN_FAN_Speed:value" math="int $0" interval="5000"
+sensors name="SensorsGPUTemp" type="engine" cmd="systemmonitor:lmsensors/radeon-pci-0100/GPU_Temperature:value" math="int $0" interval="5000"
+sensors name="SensorsCPUTemp" type="engine" cmd="systemmonitor:lmsensors/it8720-isa-0228/CPU_Temperature:value" math="int $0" interval="5000"
+sensors name="SensorsCPUFanSpeed" type="engine" cmd="systemmonitor:lmsensors/it8720-isa-0228/CPU_Fan_Speed:value" math="int $0" interval="5000"
+# IGNORE, always almost the same than CPU sensors name="SensorsMBTemp" type="engine" cmd="systemmonitor:lmsensors/it8720-isa-0228/MB_Temperature:value" interval="5000"
+sensors name="SensorsChassis1FanSpeed" type="engine" cmd="systemmonitor:lmsensors/it8720-isa-0228/Chassis_Side_Fans_Speed:value" math="int $0" interval="5000"
+sensors name="SensorsChassis2FanSpeed" type="engine" cmd="systemmonitor:lmsensors/it8720-isa-0228/Chassis_Front/Rear_Fans_Speed:value" math="int $0" interval="5000"
+#sensors name="SensorsChassis3FanSpeed" type="engine" cmd="systemmonitor:lmsensors/it8720-isa-0228/CHASSIS3_FAN_FAN_Speed:value" math="int $0" interval="5000"
+#sensors name="SensorsChassis4FanSpeed" type="engine" cmd="systemmonitor:lmsensors/it8720-isa-0228/CHASSIS4_FAN_FAN_Speed:value" math="int $0" interval="5000"
 
 # hddtempd
 sensors name="SensorsHdd1Temp" type="program" cmd=%netcat localhost 7634 | awk -F \| '{print $4" °C pour "$3}'% interval="5000"
@@ -77,33 +77,33 @@ value key="Carte graphique :" use="SensorsGPUTemp" format="$1 °C" interval="500
 value key="Disques durs :" use="SensorsHdd1Temp" format="$1" interval="5000"
 value key="" use="SensorsHdd2Temp" format="$1" interval="5000"
 value key="" use="SensorsHdd3Temp" format="$1" interval="5000"
-value key="Boitier :" use="SensorsChassis1FanSpeed" format="$1 trs/min vers l'avant" interval="5000"
-value key=" " use="SensorsChassis2FanSpeed" format="$1 trs/min depuis l'arrière" interval="5000"
+value key="Boitier :" use="SensorsChassis1FanSpeed" format="$1 trs/min depuis le côté" interval="5000"
+value key=" " use="SensorsChassis2FanSpeed" format="$1 trs/min vers l'arrière" interval="5000"
 #value key=" " use="SensorsChassis3FanSpeed" format="$1 trs/min vers le processeur" interval="5000"
-value key=" " use="SensorsChassis4FanSpeed" format="$1 trs/min depuis le côté" interval="5000"
+#value key=" " use="SensorsChassis1FanSpeed" format="$1 trs/min depuis le côté" interval="5000"
 
 
 
 ## NETWORKING
 ##
 title text="Réseau"
-# in case of plurality of eth interfaces, just copy the eth0 stuff
+# in case of plurality of eth interfaces, just copy the eth2 stuff
 # to eth(n) stuff, etc
 # requires ethtool
 sensor name="NetGateway" type="program" cmd="nslookup `route -n | grep UG  |awk '{print $2}'` | grep name | cut -d = -f 2 | sed s/\.$//;" interval="60000"
 #IF THE PREVIOUS DOES NOT WORK (no domain) sensor name="NetGateway" type="program" cmd="route -n | grep UG  |awk '{print $2}'" interval="60000"
 
-sensor name="NetEth0Ip" type="program" cmd="/sbin/ifconfig eth0 | egrep 'inet add?r'  | cut -d ':' -f 2 | cut -d ' ' -f 1" interval="60000"
-sensor name="NetEth0Speed" type="program" cmd="/sbin/ethtool eth0 2>/dev/null | grep Speed: | cut -d ' ' -f 2 | sed 's/\([0-9]*\)\([^0-9]*\)/\1 \2/g;'" interval="60000"
+sensor name="NetEth2Ip" type="program" cmd="/sbin/ifconfig eth2 | egrep 'inet add?r'  | cut -d ':' -f 2 | cut -d ' ' -f 1" interval="60000"
+sensor name="NetEth2Speed" type="program" cmd="/sbin/ethtool eth2 2>/dev/null | grep Speed: | cut -d ' ' -f 2 | sed 's/\([0-9]*\)\([^0-9]*\)/\1 \2/g;'" interval="60000"
 
-sensor name="NetEth0Down" type="engine" cmd="systemmonitor:network/interfaces/eth0/receiver/data:value" interval="3000"
-sensor name="NetEth0Up" type="engine" cmd="systemmonitor:network/interfaces/eth0/transmitter/data:value" interval="3000"
+sensor name="NetEth2Down" type="engine" cmd="systemmonitor:network/interfaces/eth2/receiver/data:value" interval="3000"
+sensor name="NetEth2Up" type="engine" cmd="systemmonitor:network/interfaces/eth2/transmitter/data:value" interval="3000"
 
 # Output
-text use="NetEth0Ip" use="NetEth0Speed" format="$1 sur eth0 à $2 :" interval="60000"
-value key=" " use="NetGateway" use="NetEth0Down" format="$1 => $2 ko/s" color="#FFFFC0" interval="3000"
-value key=" " use="NetGateway" use="NetEth0Up" format="$1 <= $2 ko/s" color="#62FFEA" interval="3000"
-plotter use="NetEth0Down" use="NetEth0Up" plot="$1" color="#FFFFC0" plot="$2" color="#62FFEA" height="50" interval="3000"
+text use="NetEth2Ip" use="NetEth2Speed" format="$1 sur eth2 à $2 :" interval="60000"
+value key=" " use="NetGateway" use="NetEth2Down" format="$1 => $2 ko/s" color="#FFFFC0" interval="3000"
+value key=" " use="NetGateway" use="NetEth2Up" format="$1 <= $2 ko/s" color="#62FFEA" interval="3000"
+plotter use="NetEth2Down" use="NetEth2Up" plot="$1" color="#FFFFC0" plot="$2" color="#62FFEA" height="50" interval="3000"
 
 ## STORAGE
 ##
