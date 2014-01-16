@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Copyright (c) 2013 Mathieu Roy <yeupou--gnu.org>
+# Copyright (c) 2014 Mathieu Roy <yeupou--gnu.org>
 #      http://yeupou.wordpress.com
 #
 #   This program is free software; you can redistribute it and/or modify
