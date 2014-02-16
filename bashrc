@@ -24,7 +24,8 @@ alias urc='cd ~/.rc && git pull'
 
 alias pgit='git push && git push github'
 
-alias im2gif='convert -loop 0 +dither -colors 256 -depth 8 -layers optimize -deconstruct $1' #  -resize 38000@ -layers optimize [-delay 60] [-resize x350] $1 = *.jpg output.gif 
+alias im2gifslow='convert -loop 0 +dither -colors 256 -depth 8 -delay 60 -layers optimize -deconstruct $1' #  -resize 38000@ -layers optimize [-delay 60] [-resize x350] $1 = *.jpg output.gif 
+alias im2gif='convert -loop 0 +dither -colors 256 -depth 8 -delay 15 -layers optimize -deconstruct $1' #  -resize 38000@ -layers optimize [-delay 60] [-resize x350] $1 = *.jpg output.gif 
 
 APTGETTROLOLOLOLO='export TERM='$TERM' && apt-get update && apt-get dist-upgrade && debfoster && cd /etc && git log --stat --max-count=50 --pretty=format:"%s of %aD" > /root/changelog.etc && head -n 20 /root/changelog.etc'
 alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $HOSTNAME:\033[0m" && su -c "$APTGETTROLOLOLOLO"' 

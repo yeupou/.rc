@@ -91,8 +91,6 @@
  '(display-time-24hr-format t)
  '(global-font-lock-mode t nil (font-lock))
  '(message-directory "~/.Mail/" t)
- '(mouse-sel-mode nil nil (mouse-sel) "When Mouse Sel mode is enabled, mouse s
-ection is enhanced in various ways.")
  '(mouse-wheel-mode t nil (mwheel))
  '(pc-select-meta-moves-sexps t)
  '(pc-selection-mode t nil (pc-select))
