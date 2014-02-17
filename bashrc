@@ -24,6 +24,8 @@ alias urc='cd ~/.rc && git pull'
 
 alias pgit='git push && git push github'
 
+alias fix_kded='qdbus org.kde.kded /modules/networkstatus setNetworkStatus ntrack 4'
+
 alias im2gifslow='convert -loop 0 +dither -colors 256 -depth 8 -delay 60 -layers optimize -deconstruct $1' #  -resize 38000@ -layers optimize [-delay 60] [-resize x350] $1 = *.jpg output.gif 
 alias im2gif='convert -loop 0 +dither -colors 256 -depth 8 -delay 15 -layers optimize -deconstruct $1' #  -resize 38000@ -layers optimize [-delay 60] [-resize x350] $1 = *.jpg output.gif 
 
