@@ -11,7 +11,6 @@
   (cond
    ((file-newer-than-file-p "~/.rc/emacs.el" "~/.rc/emacs.elc")
     (let ((mode-line-format "*** Recompiling .emacs.el ***"))
-      (yow)
       (sit-for 1)
       (byte-compile-file "~/.rc/emacs.el")
       (message ".emacs.elc recompiled --- reloading...")
@@ -35,7 +34,7 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "#3d3d3d" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:stipple nil :background "#3d3d3d" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :foundry "unknown"))))
  '(bold-italic ((t (:underline "cyan" :slant italic :weight bold))))
  '(border ((t nil)))
  '(cursor ((t (:background "#73DAE1" :foreground "white"))))
@@ -58,7 +57,7 @@
  '(header-line ((t (:inherit mode-line :background "#eeeee6" :foreground "grey20" :box nil))))
  '(highlight ((((class color) (background dark)) (:background "aquamarine" :foreground "black"))))
  '(italic ((t (:underline "cyan" :slant italic))))
- '(menu ((((type x-toolkit)) (:background "#eeeee6" :foreground "black" :family "misc-fixed"))))
+ '(menu ((((type x-toolkit)) (:background "#eeeee6" :foreground "black"))))
  '(message-cited-text-face ((((class color) (background dark)) (:foreground "sandy brown"))))
  '(message-header-cc-face ((t (:foreground "medium aquamarine" :weight bold))))
  '(message-header-name-face ((((class color) (background dark)) (:foreground "aquamarine"))))
