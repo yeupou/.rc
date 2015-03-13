@@ -17,11 +17,9 @@ export EDITOR="emacs"
 export CVS_RSH="ssh"
 
 # useful/less aliases
-alias redshift='cd tmprm && nohup redshift -l 48.799:2.505 -t 6200:3700'
-
+alias redshift='cd tmprm && nohup redshift -l 48.799:2.505 -t 6200:3700' 
 alias uu='cd ~/ && ~/.unison.sh'
 alias urc='cd ~/.rc && git pull'
-
 alias pgit='git push && git push github'
 
 alias fix_kded='qdbus org.kde.kded /modules/networkstatus setNetworkStatus ntrack 4'
@@ -33,6 +31,8 @@ APTGETTROLOLOLOLO='export TERM='$TERM' && apt-get update && apt-get dist-upgrade
 alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $HOSTNAME:\033[0m" && su -c "$APTGETTROLOLOLOLO"' 
 alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
 
+alias pw='cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 20 | head -n 1'
+   
 function word-analysis {
     echo "== Contenu de $1 =="
     dict=/usr/share/dict/words

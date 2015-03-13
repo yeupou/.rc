@@ -153,3 +153,5 @@
 (message "Loading ~/.emacs.el...")
 ;; EOF
 (put 'scroll-left 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
