@@ -51,6 +51,7 @@ function scan2pdfs {
     LIST=""
     [ "$ENDFILE" == "" ] && read ENDFILE
     for i in `seq --equal-width 999`; do
+	beep  -f 100 -l 25
 	echo "(d)one?"
 	read NEXT
 	[ "$NEXT" == "d" ] && break
@@ -58,6 +59,7 @@ function scan2pdfs {
 	LIST="$LIST $ENDFILE"$i".pdf"
     done
     gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -sOutputFile="$ENDFILE".pdf -f "$ENDFILE"*.pdf
+    beep  -f 100 -l 100
     echo "OK? (CTRL-C)"
     read OK    
     rm -f $LIST
