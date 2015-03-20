@@ -37,6 +37,7 @@ function scan2pdf {
     cd ~/tmprm/scan
     FILE=$1
     [ "$FILE" == "" ] && read FILE
+    [ -e "$FILE".pdf ] && return
     # A4 gray
     scanimage -l 0 -t 0 -x 215 -y 297 --mode Gray --resolution=300 > "$FILE".pnm
     pnmtops -dpi 300 "$FILE".pnm > "$FILE".ps
@@ -44,11 +45,22 @@ function scan2pdf {
     rm -f "$FILE".pnm "$FILE".ps
 }
 
-function pdf2pdfs {
-    FILE=$1
-    [ "$FILE" == "" ] && read FILE
-    FILES=`ls "$FILE"*.pdf`
-    gs -sDEVICE=pdfwrite -sOutputFile="$FILE".pdf -f "$FILES"
+function scan2pdfs {
+    cd ~/tmprm/scan
+    ENDFILE=$1
+    LIST=""
+    [ "$ENDFILE" == "" ] && read ENDFILE
+    for i in `seq --equal-width 999`; do
+	echo "(d)one?"
+	read NEXT
+	[ "$NEXT" == "d" ] && break
+	scan2pdf "$ENDFILE"$i
+	LIST="$LIST $ENDFILE"$i".pdf"
+    done
+    gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -sOutputFile="$ENDFILE".pdf -f "$ENDFILE"*.pdf
+    echo "OK? (CTRL-C)"
+    read OK    
+    rm -f $LIST
 }
 
     
