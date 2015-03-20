@@ -48,12 +48,14 @@ function scan2pdf {
 function scan2pdfs {
     cd ~/tmprm/scan
     ENDFILE=$1
+    LIST=""
     [ "$ENDFILE" == "" ] && read ENDFILE
     for i in `seq --equal-width 999`; do
 	echo "(d)one?"
 	read NEXT
 	[ "$NEXT" == "d" ] && break
 	scan2pdf "$ENDFILE"$i
+	LIST="$LIST $ENDFILE"$i".pdf"
     done
     gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -sOutputFile="$ENDFILE".pdf -f "$ENDFILE"*.pdf
     echo "OK? (CTRL-C)"
