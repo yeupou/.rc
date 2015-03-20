@@ -32,7 +32,47 @@ alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper =>
 alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
 
 alias pw='cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 15 | head -n 1'
-   
+
+function scan2pdf {
+    cd ~/tmprm/scan
+    FILE=$1
+    [ "$FILE" == "" ] && read FILE
+    # A4 gray
+    scanimage -l 0 -t 0 -x 215 -y 297 --mode Gray --resolution=300 > "$FILE".pnm
+    pnmtops -dpi 300 "$FILE".pnm > "$FILE".ps
+    gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH -sOutputFile="$FILE".pdf "$FILE".ps
+    rm -f "$FILE".pnm "$FILE".ps
+}
+
+function pdf2pdfs {
+    FILE=$1
+    [ "$FILE" == "" ] && read FILE
+    FILES=`ls "$FILE"*.pdf`
+    gs -sDEVICE=pdfwrite -sOutputFile="$FILE".pdf -f "$FILES"
+}
+
+    
+function latex2ps {
+    # http://cvs.gna.org/cvsweb/darius-tools/text/sh/latex2ps.sh?rev=1.6;content-type=text%2Fplain;cvsroot=darius-tools
+    FILE=${1%.tex}
+    [ ! -e "$FILE".tex ] && return
+    
+    # we latex-compile 2 times so we get nice \tableofcontents
+    echo "--- Running LaTeX..."
+    latex \\nonstopmode\\input "$FILE".tex >/dev/null
+    echo "--- Running LaTeX one more time, for indexes etc..."
+    latex \\nonstopmode\\input "$FILE".tex >/dev/null
+    # the dvi ouput must be in the current directory, it is how latex works
+    # by default
+    NEWFILE=`basename $FILE`
+    echo "--- Generating postscript..."
+    dvips -o "$NEWFILE".ps "$NEWFILE".dvi >/dev/null
+    rm -f "$NEWFILE".aux "$NEWFILE".log "$NEWFILE"*~ "$NEWFILE".dvi "$NEWFILE".toc
+    echo "--- Generating pdf..."
+    ps2pdf "$FILE".ps >/dev/null
+    rm -f "$FILE".ps
+}
+
 function word-analysis {
     echo "== Contenu de $1 =="
     dict=/usr/share/dict/words
