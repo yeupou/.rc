@@ -21,6 +21,7 @@ alias redshift='cd tmprm && nohup redshift -l 48.799:2.505 -t 6200:3700'
 alias uu='cd ~/ && ~/.unison.sh'
 alias urc='cd ~/.rc && git pull'
 alias pgit='git push && git push github'
+alias grep='grep -a'
 
 alias fix_kded='qdbus org.kde.kded /modules/networkstatus setNetworkStatus ntrack 4'
 
@@ -31,39 +32,39 @@ APTGETTROLOLOLOLO='export TERM='$TERM' && apt-get update && apt-get dist-upgrade
 alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $HOSTNAME:\033[0m" && su -c "$APTGETTROLOLOLOLO"' 
 alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
 
-alias pw='cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 15 | head -n 1'
+alias pw='cat /dev/urandom | tr -dc [:graph:] | fold -w 15 | head -n 1'
 
-function scan2pdf {
-    cd ~/tmprm/scan
-    FILE=$1
-    [ "$FILE" == "" ] && read FILE
-    [ -e "$FILE".pdf ] && return
-    # A4 gray
-    scanimage -l 0 -t 0 -x 215 -y 297 --mode Gray --resolution=300 > "$FILE".pnm
-    pnmtops -dpi 300 "$FILE".pnm > "$FILE".ps
-    gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH -sOutputFile="$FILE".pdf "$FILE".ps
-    rm -f "$FILE".pnm "$FILE".ps
-}
+# function scan2pdf {
+#     cd ~/tmprm/scan
+#     FILE=$1
+#     [ "$FILE" == "" ] && read FILE
+#     [ -e "$FILE".pdf ] && return
+#     # A4 gray
+#     scanimage -l 0 -t 0 -x 215 -y 297 --mode Gray --resolution=300 > "$FILE".pnm
+#     pnmtops -width 8.263 -height 11.69 -imagewidth 8.263 -imageheight 11.69 -dpi 300 "$FILE".pnm > "$FILE".ps
+#     gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH -sOutputFile="$FILE".pdf "$FILE".ps
+#     rm -f "$FILE".pnm "$FILE".ps
+# }
 
-function scan2pdfs {
-    cd ~/tmprm/scan
-    ENDFILE=$1
-    LIST=""
-    [ "$ENDFILE" == "" ] && read ENDFILE
-    for i in `seq --equal-width 999`; do
-	beep  -f 100 -l 25
-	echo "(d)one?"
-	read NEXT
-	[ "$NEXT" == "d" ] && break
-	scan2pdf "$ENDFILE"$i
-	LIST="$LIST $ENDFILE"$i".pdf"
-    done
-    gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -sOutputFile="$ENDFILE".pdf -f "$ENDFILE"*.pdf
-    beep  -f 100 -l 100
-    echo "OK? (CTRL-C)"
-    read OK    
-    rm -f $LIST
-}
+# function scan2pdfs {
+#     cd ~/tmprm/scan
+#     ENDFILE=$1
+#     LIST=""
+#     [ "$ENDFILE" == "" ] && read ENDFILE
+#     for i in `seq --equal-width 999`; do
+# 	beep  -f 100 -l 25
+# 	echo "(d)one?"
+# 	read NEXT
+# 	[ "$NEXT" == "d" ] && break
+# 	scan2pdf "$ENDFILE"$i
+# 	LIST="$LIST $ENDFILE"$i".pdf"
+#     done
+#     gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -sOutputFile="$ENDFILE".pdf -f "$ENDFILE"*.pdf
+#     beep  -f 100 -l 100
+#     echo "OK? (CTRL-C)"
+#     read OK    
+#     rm -f $LIST
+# }
 
     
 function latex2ps {
@@ -123,5 +124,8 @@ function word-analysis {
     echo `wc --lines < $1`" lignes"
     
 }
+
+
+xhost + >/dev/null
 
 # EOF

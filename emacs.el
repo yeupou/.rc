@@ -91,8 +91,6 @@
  '(global-font-lock-mode t nil (font-lock))
  '(message-directory "~/.Mail/" t)
  '(mouse-wheel-mode t nil (mwheel))
- '(pc-select-meta-moves-sexps t)
- '(pc-selection-mode t nil (pc-select))
  '(read-mail-command (quote gnus))
  '(save-place t nil (saveplace))
  '(show-paren-mode t nil (paren))
@@ -109,6 +107,15 @@
 
 ;; Ignore startup kind of splash screen
 (setq inhibit-startup-message t)
+
+;; Avoid spreading ~ 
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+  backup-by-copying t    ; Don't delink hardlinks
+  version-control t      ; Use version numbers on backups
+  delete-old-versions t  ; Automatically delete excess backups
+  kept-new-versions 20   ; how many of the newest versions to keep
+  kept-old-versions 5    ; and how many of the old
+  )
 
 ;;*******************
 ;; MODES
