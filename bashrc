@@ -30,7 +30,7 @@ alias im2gif='convert -loop 0 +dither -colors 256 -depth 8 -delay 15 -layers opt
 
 APTGETTROLOLOLOLO='export TERM='$TERM' && apt-get update && apt-get dist-upgrade && debfoster && cd /etc && git log --stat --max-count=50 --pretty=format:"%s of %aD" > /root/changelog.etc && head -n 20 /root/changelog.etc'
 alias thin-apt-get='echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $HOSTNAME:\033[0m" && su -c "$APTGETTROLOLOLOLO"' 
-alias large-apt-get='HOSTS="gate mx2 delphes"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
+alias large-apt-get='HOSTS="p s"; for host in $HOSTS; do echo -e "\E[37;44m\033[1mdist-upgrade+debfoster+etckeeper => $host:\033[0m" && ssh root@$host "$APTGETTROLOLOLOLO"; done' 
 
 alias pw='cat /dev/urandom | tr -dc [:graph:] | fold -w 15 | head -n 1'
 
